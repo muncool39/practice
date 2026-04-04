@@ -34,56 +34,26 @@ public class OrderService {
     //주문 생성
     @Transactional
     public OrderResponseDto createOrder(OrderCreateDto dto) {
-        Member member = memberRepo.findById(dto.memberId()).orElseThrow();
-        Order order = Order.builder()
-                .buyer(member)
-                .orderStatus(OrderStatus.PENDING)
-                .orderTime(LocalDateTime.now())
-                .build();
+        Member member = memberRepo.findById(dto.memberId())
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
 
-        /* 쿼리문이 많이 나감 -> 줄일 수 있을까? -> in 쿼리 사용
-
-        List<Product> products = dto.productId().stream()
-                .map(pid -> productRepo.findById(pid).orElseThrow())
-                .toList();
-        */
-        // in 쿼리 사용 (미친 근데 id 검증을 못해서 그런가? 그러게 그냥 어드바이저로 잡는건가?)
+        Order order = Order.createOrder(member, dto.orderTime());
         List<Product> products = productRepo.findAllById(dto.productId());
 
         List<OrderProduct> orderProducts = IntStream.range(0, dto.count().size())
                 .mapToObj(idx -> {
                     Product product = products.get(idx);
-                    if (product.getStock() - dto.count().get(idx) < 0) {
-                        throw new RuntimeException("재고가 없어 주문 불가합니다");
-                    }
-                    product.decreaseStock(dto.count().get(idx));
+                    Long orderCount = dto.count().get(idx);
+                    product.buyProductWithStock(orderCount);
+                    return order.createOrderProduct(orderCount, product);
+                })
+                .toList();
 
-                    return OrderProduct.builder()
-                            .order(order).number(dto.count().get(idx))
-                            .product(products.get(idx))
-                            .build();
-                }).toList();
-
-
-        /* 간소화하기! (위가 간소화한거)
-        HashMap<Product, Long> productCountMap = new HashMap<>();
-        for (int i = 0; i < dto.count().size(); i++) {
-            productCountMap.put(products.get(i), dto.count().get(i));
-        }
-
-        List<OrderProduct> orderProducts = products.stream()
-                .map(p -> OrderProduct.builder()
-                        .order(order)
-                        .number(productCountMap.get(p))
-                        .product(p)
-                        .build()
-                ).toList();
-        */
-
-        order.addOrderProducts(orderProducts);
         Order savedOrder = orderRepo.save(order);
 
-        return OrderResponseDto.of(savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
+        return OrderResponseDto.of(
+                savedOrder.getOrderTime(), OrderStatus.COMPLETED, true
+        );
     }
 
     // 주문 수정 - 주문 확정으로 바꾸는 메서드 만들어보기!

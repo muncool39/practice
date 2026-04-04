@@ -55,6 +55,14 @@ public class Product {
         this.stock -= subStock;
     }
 
+    public void buyProductWithStock(Long orderCount) {
+        if (this.stock - orderCount < 0) {
+            throw new RuntimeException("재고가 없어 주문 불가합니다.");
+        }
+
+        this.decreaseStock(orderCount);
+    }
+
 }
 
 

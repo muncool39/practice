@@ -52,5 +52,36 @@ public class Order {
         this.orderProducts = orderProducts;
     }
 
+    public static Order createOrder(Member member, LocalDateTime orderTime) {
+        Order order = Order.builder()
+                .buyer(member)
+                .orderStatus(OrderStatus.PENDING)
+                .orderTime(orderTime)
+                .build();
+
+        order.addOrderProducts(orderProducts);
+
+        return order;
+    }
+
+    // 애그리거트 루트 / 응집도 향상
+    public OrderProduct createOrderProduct(Long orderCount, Product product) {
+        return OrderProduct.builder()
+                .order(this)
+                .number(orderCount)
+                .product(product)
+                .build();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
 
