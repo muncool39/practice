@@ -1,6 +1,5 @@
 package com.example.my_api_server.service;
 
-import com.example.my_api_server.common.OrderCreateFixture;
 import com.example.my_api_server.entity.*;
 import com.example.my_api_server.repo.MemberDBRepo;
 import com.example.my_api_server.repo.OrderRepo;
@@ -17,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -163,9 +161,7 @@ class OrderServiceUnitTest {
                 .password("1234")
                 .build();
 
-        OrderCreateDto createDto = OrderCreateFixture.defaultDto(
-                memberId, productIds, counts, LocalDateTime.now()
-        );
+        OrderCreateDto createDto = new OrderCreateDto(memberId, productIds, counts);
 
         // DB와 통신하지 않도록 proxy처럼 임의로 실행
         when(productRepo.findAllById(productIds))

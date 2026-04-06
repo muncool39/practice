@@ -10,4 +10,9 @@ public record OrderCreateDto(
         List<Long> count,
         LocalDateTime orderTime
 ) {
+
+    public OrderCreateDto(Long memberId, List<Long> productId, List<Long> count) {
+        this(memberId, productId, count, LocalDateTime.now());
+    }
+
 }

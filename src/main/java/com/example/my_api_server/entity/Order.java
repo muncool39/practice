@@ -59,8 +59,6 @@ public class Order {
                 .orderTime(orderTime)
                 .build();
 
-        order.addOrderProducts(orderProducts);
-
         return order;
     }
 

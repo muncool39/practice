@@ -49,6 +49,7 @@ public class OrderService {
                 })
                 .toList();
 
+        order.addOrderProducts(orderProducts);
         Order savedOrder = orderRepo.save(order);
 
         return OrderResponseDto.of(
