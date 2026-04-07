@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,10 @@ public class OrderService {
 
         Order order = Order.createOrder(member, dto.orderTime());
         List<Product> products = productRepo.findAllById(dto.productId());
+
+        if(dto.productId().size() != products.size()) {
+            throw new RuntimeException("상품이 존재하지 않습니다.");
+        }
 
         List<OrderProduct> orderProducts = IntStream.range(0, dto.count().size())
                 .mapToObj(idx -> {

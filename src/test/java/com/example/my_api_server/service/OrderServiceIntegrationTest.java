@@ -149,7 +149,6 @@ public class OrderServiceIntegrationTest {
         public void validateMemberWhenCreateOrder(){
             // given
             List<Long> counts = List.of(1L, 2L);
-            Member savedMember = getSavedMember("1234");
             List<Product> products = getProducts();
             List<Long> productIds = getProductIds(products);
 
@@ -164,11 +163,19 @@ public class OrderServiceIntegrationTest {
 
 
         @Test
-        @DisplayName("주문하는 상품에 대한 정보가 존재하지 않는 경우")
+        @DisplayName("주문 시 상품이 존재하지 않으면 예외가 발생한다.")
         public void validateProductWhenCreateOrder(){
             // given
+            List<Long> counts = List.of(1L, 2L);
+            List<Long> productIds = List.of(100L, 200L);
+
+            Member savedMember = getSavedMember("1234");
+            OrderCreateDto createDto = new OrderCreateDto(savedMember.getId(), productIds, counts);
 
             // when + then
+            assertThatThrownBy(() -> orderService.createOrder(createDto))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("상품이 존재하지 않습니다.");
         }
 
     }
