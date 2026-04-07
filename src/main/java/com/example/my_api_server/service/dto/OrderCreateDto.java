@@ -11,6 +11,12 @@ public record OrderCreateDto(
         LocalDateTime orderTime
 ) {
 
+    public OrderCreateDto {
+        if(orderTime == null) {
+            orderTime = LocalDateTime.now();
+        }
+    }
+
     public OrderCreateDto(Long memberId, List<Long> productId, List<Long> count) {
         this(memberId, productId, count, LocalDateTime.now());
     }

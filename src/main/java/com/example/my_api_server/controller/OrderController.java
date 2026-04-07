@@ -25,7 +25,7 @@ public class OrderController {
     @PostMapping
     public OrderResponseDto createOrder(@Validated @RequestBody OrderCreateDto dto) {
         //return orderService.createOrder(dto);
-        return orderService.createOrderOptLock(dto);
+        return orderService.createOrderPLock(dto);
     }
 
     @GetMapping("/{id}")
