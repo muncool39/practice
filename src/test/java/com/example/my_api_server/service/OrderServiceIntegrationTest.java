@@ -3,6 +3,7 @@ package com.example.my_api_server.service;
 
 import com.example.my_api_server.common.MemberFixture;
 import com.example.my_api_server.common.ProductFixture;
+import com.example.my_api_server.config.TestContainerConfig;
 import com.example.my_api_server.entity.Member;
 import com.example.my_api_server.entity.Product;
 import com.example.my_api_server.repo.MemberDBRepo;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -25,6 +27,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest // Spring DI를 통해 빈(Bean) 주입헤주는 어노테이션 (Run해주는거랑 비슷)
+@Import(TestContainerConfig.class)
 @ActiveProfiles("test") // yaml 파일 어떤거 읽을지
 public class OrderServiceIntegrationTest {
 
@@ -159,11 +162,13 @@ public class OrderServiceIntegrationTest {
 
         }
 
-        // 미니 과제 (케이스 4번)
+
         @Test
         @DisplayName("주문하는 상품에 대한 정보가 존재하지 않는 경우")
-        public void dd() {
-            return;
+        public void validateProductWhenCreateOrder(){
+            // given
+
+            // when + then
         }
 
     }

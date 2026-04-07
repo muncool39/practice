@@ -1,5 +1,6 @@
 package com.example.my_api_server.service;
 
+import com.example.my_api_server.config.TestContainerConfig;
 import com.example.my_api_server.entity.Member;
 import com.example.my_api_server.entity.Product;
 import com.example.my_api_server.entity.ProductType;
@@ -22,15 +23,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@Import(TestContainerConfig.class)
+@ActiveProfiles("test")
 class OrderServiceTest2 {
 
     private static final Logger log = LoggerFactory.getLogger(OrderServiceTest2.class);
 
     @Autowired
     OrderService orderService;
-
 
     @Autowired
     private OrderRepo orderRepository;
@@ -129,7 +133,7 @@ class OrderServiceTest2 {
             executor.submit(() -> {
                 try {
                     startLatch.await(); //모든 스레드 여기서 대기 후
-                    // orderService.createOrderOptLock(request); //로직 실행(race-condition 발생)
+                    //orderService.createOrderOptLock(request); //로직 실행(race-condition 발생)
                     orderService.createOrderPLock(request); // *** 락 유형 변경
                     successCount.incrementAndGet(); //주문 성공 카운트
                 } catch (Exception e) {

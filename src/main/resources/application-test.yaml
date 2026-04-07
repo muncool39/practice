@@ -25,10 +25,9 @@ decorator:
 
 
 
-
-#testcontainers:
-#  postgres:
-#    image: postgres:18-alpine  # 프로덕션 DB 버전과 맞추는 게 유일한 관심사
+testcontainers:
+  postgres:
+    image: postgres:18-alpine  # 프로덕션 DB 버전과 맞추는 게 유일한 관심사
 
 spring:
   config:
@@ -36,11 +35,11 @@ spring:
       on-profile: test # 파일 이름 명시
 
 
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/my_api
-    username: postgres
-    password: 1234
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5433/my_api
+#    username: postgres
+#    password: 1234
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
