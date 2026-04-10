@@ -22,7 +22,9 @@ public class MemberDBService {
     private final ApplicationEventPublisher publisher; //이벤트를 보내줄 퍼블리셔
 
     /**
-     * 1. @Transactional은 AOP로 돌아가서 begin tran() commit() 2. DB에 commit 명령어가 실핼되어야 테이블에 반영됨 3. Jpa의 구현체인 하이버네이트와 엔티티매니저
+     * 1. @Transactional은 AOP로 돌아가서 begin tran() commit()
+     * 2. DB에 commit 명령어가 실핼되어야 테이블에 반영됨
+     * 3. Jpa의 구현체인 하이버네이트와 엔티티매니저
      * JDBC Driver <-> DB 과정을 자동으로 해줌
      */
     //회원 저장
