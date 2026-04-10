@@ -10,6 +10,8 @@ import lombok.Getter;
 @AllArgsConstructor(staticName = "of")
 @Builder
 public class OrderResponseDto {
+    private Long orderId;
+
     private LocalDateTime orderCompletedTime;
 
     private OrderStatus orderStatus;
