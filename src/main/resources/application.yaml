@@ -2,6 +2,10 @@ server:
   port: 8080
 
 spring:
+#  threads:
+#    virtual:
+#      enabled: true  #가상스레드 활성화
+
   application:
     name: my_api
   profiles: #기본 프로파일 설정
