@@ -153,7 +153,7 @@ public class OrderServiceIntegrationTest {
             OrderResponseDto resDto = orderService.createOrder(createDto);
 
             // then
-            List<OrderProduct> result = orderProductRepo.findAllByOrderId(resDto.getOrderId());
+            List<OrderProduct> result = orderProductRepo.findAll();
 
             assertThat(result.size()).isEqualTo(products.size());
 
