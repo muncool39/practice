@@ -58,7 +58,7 @@ public class OrderService {
         Order savedOrder = orderRepo.save(order);
 
         return OrderResponseDto.of(
-                savedOrder.getId(), savedOrder.getOrderTime(), OrderStatus.COMPLETED, true
+                savedOrder.getOrderTime(), OrderStatus.COMPLETED, true
         );
     }
 
@@ -69,7 +69,7 @@ public class OrderService {
     public OrderResponseDto findOrder(Long orderId) {
         Order order = orderRepo.findById(orderId).orElseThrow();
         return OrderResponseDto.of(
-                order.getId(), order.getOrderTime(), order.getOrderStatus(), true
+                order.getOrderTime(), order.getOrderStatus(), true
         );
     }
 
@@ -104,7 +104,7 @@ public class OrderService {
         Order savedOrder = orderRepo.save(order);
 
         return OrderResponseDto.of(
-                savedOrder.getId(), savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
+                savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
     }
 
     // 비관적 락 예시
@@ -139,7 +139,7 @@ public class OrderService {
         Order savedOrder = orderRepo.save(order);
 
         return OrderResponseDto.of(
-                savedOrder.getId(), savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
+                savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
     }
 }
 
