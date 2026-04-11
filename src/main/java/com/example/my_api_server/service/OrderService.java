@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,8 +102,7 @@ public class OrderService {
         order.addOrderProducts(orderProducts);
         Order savedOrder = orderRepo.save(order);
 
-        return OrderResponseDto.of(
-                savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
+        return OrderResponseDto.of(savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
     }
 
     // 비관적 락 예시
@@ -138,8 +136,7 @@ public class OrderService {
         order.addOrderProducts(orderProducts);
         Order savedOrder = orderRepo.save(order);
 
-        return OrderResponseDto.of(
-                savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
+        return OrderResponseDto.of(savedOrder.getOrderTime(), OrderStatus.COMPLETED, true);
     }
 }
 
