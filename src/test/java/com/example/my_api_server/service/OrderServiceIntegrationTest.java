@@ -5,6 +5,7 @@ import com.example.my_api_server.common.MemberFixture;
 import com.example.my_api_server.common.ProductFixture;
 import com.example.my_api_server.config.TestContainerConfig;
 import com.example.my_api_server.entity.Member;
+import com.example.my_api_server.entity.OrderProduct;
 import com.example.my_api_server.entity.Product;
 import com.example.my_api_server.repo.MemberDBRepo;
 import com.example.my_api_server.repo.OrderProductRepo;
@@ -138,7 +139,29 @@ public class OrderServiceIntegrationTest {
                     .hasMessage("재고가 없어 주문 불가합니다.");
         }
 
-        // 주문 생성시 상품 개수를 조회한다. (개수가 맞는지?)
+        @Test
+        @DisplayName("주문 생성 시 주문 상품이 정상적으로 생성된다.")
+        public void createOrderProductSuccess(){
+            // given
+            List<Long> counts = List.of(1L, 2L);
+            Member savedMember = getSavedMember("1234");
+            List<Product> products = getProducts();
+            List<Long> productIds = getProductIds(products);
+            OrderCreateDto createDto = new OrderCreateDto(savedMember.getId(), productIds, counts);
+
+            // when
+            OrderResponseDto resDto = orderService.createOrder(createDto);
+
+            // then
+            List<OrderProduct> result = orderProductRepo.findAll();
+
+            assertThat(result.size()).isEqualTo(products.size());
+
+            for(int i=0; i<products.size(); i++) {
+                assertThat(result.get(i).getProduct().getId()).isEqualTo(productIds.get(i));
+                assertThat(result.get(i).getNumber()).isEqualTo(counts.get(i));
+            }
+        }
     }
 
     @Nested()
@@ -149,7 +172,6 @@ public class OrderServiceIntegrationTest {
         public void validateMemberWhenCreateOrder(){
             // given
             List<Long> counts = List.of(1L, 2L);
-            Member savedMember = getSavedMember("1234");
             List<Product> products = getProducts();
             List<Long> productIds = getProductIds(products);
 
@@ -164,11 +186,19 @@ public class OrderServiceIntegrationTest {
 
 
         @Test
-        @DisplayName("주문하는 상품에 대한 정보가 존재하지 않는 경우")
+        @DisplayName("주문 시 상품이 존재하지 않으면 예외가 발생한다.")
         public void validateProductWhenCreateOrder(){
             // given
+            List<Long> counts = List.of(1L, 2L);
+            List<Long> productIds = List.of(100L, 200L);
+
+            Member savedMember = getSavedMember("1234");
+            OrderCreateDto createDto = new OrderCreateDto(savedMember.getId(), productIds, counts);
 
             // when + then
+            assertThatThrownBy(() -> orderService.createOrder(createDto))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessage("상품이 존재하지 않습니다.");
         }
 
     }

@@ -40,6 +40,10 @@ public class OrderService {
         Order order = Order.createOrder(member, dto.orderTime());
         List<Product> products = productRepo.findAllById(dto.productId());
 
+        if(dto.productId().size() != products.size()) {
+            throw new RuntimeException("상품이 존재하지 않습니다.");
+        }
+
         List<OrderProduct> orderProducts = IntStream.range(0, dto.count().size())
                 .mapToObj(idx -> {
                     Product product = products.get(idx);
